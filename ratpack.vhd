@@ -2,7 +2,7 @@
 -- Filename: ratpack.vhd
 -- Purpose : Rational arithmetic package
 -- Author  : Nikolaos Kavvadias <nikolaos.kavvadias@gmail.com>
--- Date    : 14-May-2010
+-- Date    : 17-Nov-2010
 -- Version : 0.1
 -- Revision: 0.0.0 (2009/07/25)
 --           Initial version. Added the definition of a rational number, and the
@@ -13,6 +13,8 @@
 --           Added: numerator, denominator, abs, relational operators (>, <, >=,
 --           <=, =, /=, changed the int2rat to to_rational, new version of
 --           int2rat (casting an integer to a rational).
+--           0.0.2 (2010/11/17)
+--           Added an iterative version for the gcd computation (gcditer).
 -- License : Copyright (C) 2009, 2010 by Nikolaos Kavvadias
 --           This program is free software. You can redistribute it and/or 
 --           modify it under the terms of the GNU Lesser General Public License, 
@@ -48,6 +50,7 @@ package ratpack is
   function "=" (a, b : rational) return boolean;
   function "/=" (a, b : rational) return boolean;
   function gcd (a, b : integer)  return integer;
+  function gcditer (a, b : integer)  return integer;
   function mediant (a, b : rational) return rational;
 
 end ratpack;
@@ -205,22 +208,40 @@ package body ratpack is
     return (diff(numer) /= 0);
   end "/=";
 
-   function gcd (a, b : integer) return integer is
-   begin
-     if a = 0 then
-       return b;
-     end if;
-     if b = 0 then
-       return a;
-     end if;
-     if (a > b) then
-       return gcd(b, a mod b);
-     else
-       return gcd(a, b mod a);
-     end if;
-   end gcd;
+  function gcd (a, b : integer) return integer is
+  begin
+    if a = 0 then
+      return b;
+    end if;
+    if b = 0 then
+      return a;
+    end if;
+    if (a > b) then
+      return gcd(b, a mod b);
+    else
+      return gcd(a, b mod a);
+    end if;
+  end gcd;
    
-   function mediant (a, b : rational) return rational is
+  function gcditer (a, b : integer) return integer is
+    variable x, y : integer;
+  begin
+    x := a;
+    y := b;
+    if ((x = 0) and (y = 0)) then
+      return 0;
+    end if;
+    while (x /= y) loop
+      if (x >= y) then
+        x := x - y;
+      else
+        y := y - x;
+      end if;
+    end loop;
+    return x;
+  end gcditer;
+   
+  function mediant (a, b : rational) return rational is
     variable r : rational;
     variable tn, td : integer;
   begin

@@ -4,14 +4,16 @@
 -- Contact          : nikolaos.kavvadias@gmail.com                          --
 --                  : http://electronics.physics.auth.gr/people/nkavv/      --
 --                  : http://www.nkavvadias.eu                              --
--- Release Date     : O7 June 2010                                          --
--- Version          : 0.1.1                                                 --
+-- Release Date     : 17 November 2010                                      --
+-- Version          : 0.1.2                                                 --
 --------------------:---------------------------------------------------------
 -- Revision history :                                                       --
 --             v0.1 : 2010-05-14                                            --
 --                  : Initial release.                                      --
 --           v0.1.1 : 2010-06-07                                            --
 --                  : Minor update in documentation (README).               --
+--           v0.1.2 : 2010-11-17                                            --
+--                  : Added gcditer.                                        --
 ------------------------------------------------------------------------------
 
 
