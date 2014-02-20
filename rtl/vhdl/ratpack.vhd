@@ -2,8 +2,8 @@
 -- Filename: ratpack.vhd
 -- Purpose : Rational arithmetic package
 -- Author  : Nikolaos Kavvadias <nikolaos.kavvadias@gmail.com>
--- Date    : 17-Nov-2010
--- Version : 0.1
+-- Date    : 21-Feb-2014
+-- Version : 0.1.0
 -- Revision: 0.0.0 (2009/07/25)
 --           Initial version. Added the definition of a rational number, and the
 --           implementation of the "+", "-", "*", "/" operators on reduced
@@ -15,7 +15,11 @@
 --           int2rat (casting an integer to a rational).
 --           0.0.2 (2010/11/17)
 --           Added an iterative version for the gcd computation (gcditer).
--- License : Copyright (C) 2009, 2010 by Nikolaos Kavvadias
+--           0.0.3 (2012/02/11)
+--           Added max, min.
+--           0.1.0 (2014/02/21)
+--           Upgraded to version 0.1.0.
+-- License : Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 by Nikolaos Kavvadias
 --           This program is free software. You can redistribute it and/or 
 --           modify it under the terms of the GNU Lesser General Public License, 
 --           either version 3 of the License, or (at your option) any later 
@@ -43,6 +47,8 @@ package ratpack is
   function "*" (a, b : rational) return rational;
   function "/" (a, b : rational) return rational;
   function "abs" (a : rational)  return rational;
+  function max (a, b : rational) return rational;
+  function min (a, b : rational) return rational;
   function ">" (a, b : rational) return boolean;
   function "<" (a, b : rational) return boolean;
   function ">=" (a, b : rational) return boolean;
@@ -168,6 +174,44 @@ package body ratpack is
     return r;
   end "abs";
   
+  function max (a, b : rational) return rational is
+    variable w, x, y, z : integer;
+    variable t1, t2 : integer;
+    variable maxv : rational;
+  begin
+    w := numerator(a);
+    x := denominator(a);
+    y := numerator(b);
+    z := denominator(b);
+    t1 := w*z;
+    t2 := x*y;
+    if (t1 > t2) then
+      maxv := a;
+    else
+      maxv := b;
+    end if; 
+    return maxv;
+  end max;
+  
+  function min (a, b : rational) return rational is
+    variable w, x, y, z : integer;
+    variable t1, t2 : integer;
+    variable minv : rational;
+  begin
+    w := numerator(a);
+    x := denominator(a);
+    y := numerator(b);
+    z := denominator(b);
+    t1 := w*z;
+    t2 := x*y;
+    if (t1 < t2) then
+      minv := a;
+    else
+      minv := b;
+    end if; 
+    return minv;
+  end min;  
+  
   function ">" (a, b : rational) return boolean is
     variable diff : rational := a - b;
   begin
@@ -247,9 +291,9 @@ package body ratpack is
   begin
     tn := a(numer) + b(numer);
     td := a(denom) + b(denom);
-    if ( gcd(abs(tn), abs(td)) > 0 ) then
-      r(numer) := tn / gcd(abs(tn), abs(td));
-      r(denom) := td / gcd(abs(tn), abs(td));
+    if ( gcditer(abs(tn), abs(td)) > 0 ) then
+      r(numer) := tn / gcditer(abs(tn), abs(td));
+      r(denom) := td / gcditer(abs(tn), abs(td));
     else
       r(numer) := tn;
       r(denom) := td;
